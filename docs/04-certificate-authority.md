@@ -80,7 +80,7 @@ In this section you will copy the various certificates to every machine at a pat
 Copy the appropriate certificates and private keys to the `node0` and `node1` machines:
 
 ```bash
-for host in node0.zerrtified.local node1.zerrtified.local; do
+for host in node0 node1; do
   ssh steve@$host mkdir /var/lib/kubelet/
   
   scp ca.crt steve@$host:/var/lib/kubelet/
