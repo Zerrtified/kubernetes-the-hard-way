@@ -49,3 +49,8 @@ service-account.pem
 service-account-csr.json
 *.swp
 .idea/
+*.crt
+*.csr
+*.key
+*.srl
+downloads/

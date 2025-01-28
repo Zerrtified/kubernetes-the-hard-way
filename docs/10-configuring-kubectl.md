@@ -8,11 +8,11 @@ In this lab you will generate a kubeconfig file for the `kubectl` command line u
 
 Each kubeconfig requires a Kubernetes API Server to connect to.
 
-You should be able to ping `server.kubernetes.local` based on the `/etc/hosts` DNS entry from a previous lap.
+You should be able to ping `kube-server01.zerrtified.local` based on the `/etc/hosts` DNS entry from a previous lap.
 
 ```bash
 curl -k --cacert ca.crt \
-  https://server.kubernetes.local:6443/version
+  https://kube-server01.zerrtified.local:6443/version
 ```
 
 ```text
@@ -36,7 +36,7 @@ Generate a kubeconfig file suitable for authenticating as the `admin` user:
   kubectl config set-cluster kubernetes-the-hard-way \
     --certificate-authority=ca.crt \
     --embed-certs=true \
-    --server=https://server.kubernetes.local:6443
+    --server=https://kube-server01.zerrtified.local:6443
 
   kubectl config set-credentials admin \
     --client-certificate=admin.crt \
@@ -74,8 +74,8 @@ kubectl get nodes
 
 ```
 NAME     STATUS   ROLES    AGE   VERSION
-node-0   Ready    <none>   30m   v1.31.2
-node-1   Ready    <none>   35m   v1.31.2
+node0   Ready    <none>   30m   v1.31.2
+node1   Ready    <none>   35m   v1.31.2
 ```
 
 Next: [Provisioning Pod Network Routes](11-pod-network-routes.md)

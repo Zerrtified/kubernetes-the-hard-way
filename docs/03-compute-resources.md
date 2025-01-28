@@ -19,9 +19,9 @@ cat machines.txt
 ```
 
 ```text
-XXX.XXX.XXX.XXX server.kubernetes.local server  
-XXX.XXX.XXX.XXX node-0.kubernetes.local node-0 10.200.0.0/24
-XXX.XXX.XXX.XXX node-1.kubernetes.local node-1 10.200.1.0/24
+XXX.XXX.XXX.XXX kube-server01.zerrtified.local server  
+XXX.XXX.XXX.XXX node0.kubernetes.local node0 10.200.0.0/24
+XXX.XXX.XXX.XXX node1.kubernetes.local node1 10.200.1.0/24
 ```
 
 Now it's your turn to create a `machines.txt` file with the details for the three machines you will be using to create your Kubernetes cluster. Use the example machine database from above and add the details for your machines. 
@@ -56,7 +56,7 @@ systemctl restart sshd
 
 ### Generate and Distribute SSH Keys
 
-In this section you will generate and distribute an SSH keypair to the `server`, `node-0`, and `node-1`, machines, which will be used to run commands on those machines throughout this tutorial. Run the following commands from the `jumpbox` machine.
+In this section you will generate and distribute an SSH keypair to the `server`, `node0`, and `node1`, machines, which will be used to run commands on those machines throughout this tutorial. Run the following commands from the `jumpbox` machine.
 
 Generate a new SSH key:
 
@@ -77,7 +77,7 @@ Copy the SSH public key to each machine:
 
 ```bash
 while read IP FQDN HOST SUBNET; do 
-  ssh-copy-id root@${IP}
+  ssh-copy-id steve@${IP}
 done < machines.txt
 ```
 
@@ -85,7 +85,7 @@ Once each key is added, verify SSH public key access is working:
 
 ```bash
 while read IP FQDN HOST SUBNET; do 
-  ssh -n root@${IP} uname -o -m
+  ssh -n steve@${IP} uname -o -m
 done < machines.txt
 ```
 
@@ -97,7 +97,7 @@ aarch64 GNU/Linux
 
 ## Hostnames
 
-In this section you will assign hostnames to the `server`, `node-0`, and `node-1` machines. The hostname will be used when executing commands from the `jumpbox` to each machine. The hostname also plays a major role within the cluster. Instead of Kubernetes clients using an IP address to issue commands to the Kubernetes API server, those clients will use the `server` hostname instead. Hostnames are also used by each worker machine, `node-0` and `node-1` when registering with a given Kubernetes cluster.
+In this section you will assign hostnames to the `server`, `node0`, and `node1` machines. The hostname will be used when executing commands from the `jumpbox` to each machine. The hostname also plays a major role within the cluster. Instead of Kubernetes clients using an IP address to issue commands to the Kubernetes API server, those clients will use the `server` hostname instead. Hostnames are also used by each worker machine, `node0` and `node1` when registering with a given Kubernetes cluster.
 
 To configure the hostname for each machine, run the following commands on the `jumpbox`.
 
@@ -106,8 +106,8 @@ Set the hostname on each machine listed in the `machines.txt` file:
 ```bash
 while read IP FQDN HOST SUBNET; do 
     CMD="sed -i 's/^127.0.1.1.*/127.0.1.1\t${FQDN} ${HOST}/' /etc/hosts"
-    ssh -n root@${IP} "$CMD"
-    ssh -n root@${IP} hostnamectl hostname ${HOST}
+    ssh -n steve@${IP} "$CMD"
+    ssh -n steve@${IP} hostnamectl hostname ${HOST}
 done < machines.txt
 ```
 
@@ -115,19 +115,19 @@ Verify the hostname is set on each machine:
 
 ```bash
 while read IP FQDN HOST SUBNET; do
-  ssh -n root@${IP} hostname --fqdn
+  ssh -n steve@${IP} hostname --fqdn
 done < machines.txt
 ```
 
 ```text
-server.kubernetes.local
-node-0.kubernetes.local
-node-1.kubernetes.local
+kube-server01.zerrtified.local
+node0.kubernetes.local
+node1.kubernetes.local
 ```
 
 ## Host Lookup Table
 
-In this section you will generate a `hosts` file which will be appended to `/etc/hosts` file on `jumpbox` and to the `/etc/hosts` files on all three cluster members used for this tutorial. This will allow each machine to be reachable using a hostname such as `server`, `node-0`, or `node-1`.
+In this section you will generate a `hosts` file which will be appended to `/etc/hosts` file on `jumpbox` and to the `/etc/hosts` files on all three cluster members used for this tutorial. This will allow each machine to be reachable using a hostname such as `server`, `node0`, or `node1`.
 
 Create a new `hosts` file and add a header to identify the machines being added:
 
@@ -154,9 +154,9 @@ cat hosts
 ```text
 
 # Kubernetes The Hard Way
-XXX.XXX.XXX.XXX server.kubernetes.local server
-XXX.XXX.XXX.XXX node-0.kubernetes.local node-0
-XXX.XXX.XXX.XXX node-1.kubernetes.local node-1
+XXX.XXX.XXX.XXX kube-server01.zerrtified.local server
+XXX.XXX.XXX.XXX node0.kubernetes.local node0
+XXX.XXX.XXX.XXX node1.kubernetes.local node1
 ```
 
 ## Adding `/etc/hosts` Entries To A Local Machine
@@ -187,23 +187,23 @@ ff02::2 ip6-allrouters
 
 
 # Kubernetes The Hard Way
-XXX.XXX.XXX.XXX server.kubernetes.local server
-XXX.XXX.XXX.XXX node-0.kubernetes.local node-0
-XXX.XXX.XXX.XXX node-1.kubernetes.local node-1
+XXX.XXX.XXX.XXX kube-server01.zerrtified.local server
+XXX.XXX.XXX.XXX node0.kubernetes.local node0
+XXX.XXX.XXX.XXX node1.kubernetes.local node1
 ```
 
 At this point you should be able to SSH to each machine listed in the `machines.txt` file using a hostname.
 
 ```bash
-for host in server node-0 node-1
-   do ssh root@${host} uname -o -m -n
+for host in server node0 node1
+   do ssh steve@${host} uname -o -m -n
 done
 ```
 
 ```text
 server aarch64 GNU/Linux
-node-0 aarch64 GNU/Linux
-node-1 aarch64 GNU/Linux
+node0 aarch64 GNU/Linux
+node1 aarch64 GNU/Linux
 ```
 
 ## Adding `/etc/hosts` Entries To The Remote Machines
@@ -214,12 +214,12 @@ Copy the `hosts` file to each machine and append the contents to `/etc/hosts`:
 
 ```bash
 while read IP FQDN HOST SUBNET; do
-  scp hosts root@${HOST}:~/
+  scp hosts steve@${HOST}:~/
   ssh -n \
-    root@${HOST} "cat hosts >> /etc/hosts"
+    steve@${HOST} "cat hosts >> /etc/hosts"
 done < machines.txt
 ```
 
-At this point hostnames can be used when connecting to machines from your `jumpbox` machine, or any of the three machines in the Kubernetes cluster. Instead of using IP addresses you can now connect to machines using a hostname such as `server`, `node-0`, or `node-1`.
+At this point hostnames can be used when connecting to machines from your `jumpbox` machine, or any of the three machines in the Kubernetes cluster. Instead of using IP addresses you can now connect to machines using a hostname such as `server`, `node0`, or `node1`.
 
 Next: [Provisioning a CA and Generating TLS Certificates](04-certificate-authority.md)

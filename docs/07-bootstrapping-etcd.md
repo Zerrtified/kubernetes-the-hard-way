@@ -10,13 +10,13 @@ Copy `etcd` binaries and systemd unit files to the `server` instance:
 scp \
   downloads/etcd-v3.4.34-linux-arm64.tar.gz \
   units/etcd.service \
-  root@server:~/
+  steve@server:~/
 ```
 
 The commands in this lab must be run on the `server` machine. Login to the `server` machine using the `ssh` command. Example:
 
 ```bash
-ssh root@server
+ssh steve@server
 ```
 
 ## Bootstrapping an etcd Cluster

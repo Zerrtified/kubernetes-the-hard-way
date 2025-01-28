@@ -12,14 +12,14 @@ When generating kubeconfig files for Kubelets the client certificate matching th
 
 > The following commands must be run in the same directory used to generate the SSL certificates during the [Generating TLS Certificates](04-certificate-authority.md) lab.
 
-Generate a kubeconfig file for the node-0 worker node:
+Generate a kubeconfig file for the node0 worker node:
 
 ```bash
-for host in node-0 node-1; do
+for host in node0 node1; do
   kubectl config set-cluster kubernetes-the-hard-way \
     --certificate-authority=ca.crt \
     --embed-certs=true \
-    --server=https://server.kubernetes.local:6443 \
+    --server=https://kube-server01.zerrtified.local:6443 \
     --kubeconfig=${host}.kubeconfig
 
   kubectl config set-credentials system:node:${host} \
@@ -41,8 +41,8 @@ done
 Results:
 
 ```text
-node-0.kubeconfig
-node-1.kubeconfig
+node0.kubeconfig
+node1.kubeconfig
 ```
 
 ### The kube-proxy Kubernetes Configuration File
@@ -54,7 +54,7 @@ Generate a kubeconfig file for the `kube-proxy` service:
   kubectl config set-cluster kubernetes-the-hard-way \
     --certificate-authority=ca.crt \
     --embed-certs=true \
-    --server=https://server.kubernetes.local:6443 \
+    --server=https://kube-server01.zerrtified.local:6443 \
     --kubeconfig=kube-proxy.kubeconfig
 
   kubectl config set-credentials system:kube-proxy \
@@ -88,7 +88,7 @@ Generate a kubeconfig file for the `kube-controller-manager` service:
   kubectl config set-cluster kubernetes-the-hard-way \
     --certificate-authority=ca.crt \
     --embed-certs=true \
-    --server=https://server.kubernetes.local:6443 \
+    --server=https://kube-server01.zerrtified.local:6443 \
     --kubeconfig=kube-controller-manager.kubeconfig
 
   kubectl config set-credentials system:kube-controller-manager \
@@ -123,7 +123,7 @@ Generate a kubeconfig file for the `kube-scheduler` service:
   kubectl config set-cluster kubernetes-the-hard-way \
     --certificate-authority=ca.crt \
     --embed-certs=true \
-    --server=https://server.kubernetes.local:6443 \
+    --server=https://kube-server01.zerrtified.local:6443 \
     --kubeconfig=kube-scheduler.kubeconfig
 
   kubectl config set-credentials system:kube-scheduler \
@@ -184,17 +184,17 @@ admin.kubeconfig
 
 ## Distribute the Kubernetes Configuration Files
 
-Copy the `kubelet` and `kube-proxy` kubeconfig files to the node-0 instance:
+Copy the `kubelet` and `kube-proxy` kubeconfig files to the node0 instance:
 
 ```bash
-for host in node-0 node-1; do
-  ssh root@$host "mkdir /var/lib/{kube-proxy,kubelet}"
+for host in node0 node1; do
+  ssh steve@$host "mkdir /var/lib/{kube-proxy,kubelet}"
   
   scp kube-proxy.kubeconfig \
-    root@$host:/var/lib/kube-proxy/kubeconfig \
+    steve@$host:/var/lib/kube-proxy/kubeconfig \
   
   scp ${host}.kubeconfig \
-    root@$host:/var/lib/kubelet/kubeconfig
+    steve@$host:/var/lib/kubelet/kubeconfig
 done
 ```
 
@@ -204,7 +204,7 @@ Copy the `kube-controller-manager` and `kube-scheduler` kubeconfig files to the 
 scp admin.kubeconfig \
   kube-controller-manager.kubeconfig \
   kube-scheduler.kubeconfig \
-  root@server:~/
+  steve@server:~/
 ```
 
 Next: [Generating the Data Encryption Config and Key](06-data-encryption-keys.md)
