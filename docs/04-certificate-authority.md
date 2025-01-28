@@ -81,15 +81,15 @@ Copy the appropriate certificates and private keys to the `node0` and `node1` ma
 
 ```bash
 for host in node0 node1; do
-  ssh steve@$host mkdir /var/lib/kubelet/
+  ssh steve@$host.zerrtified.local mkdir /var/lib/kubelet/
   
-  scp ca.crt steve@$host:/var/lib/kubelet/
+  scp ca.crt steve@$host.zerrtified.local:/var/lib/kubelet/
     
   scp $host.crt \
-    steve@$host:/var/lib/kubelet/kubelet.crt
+    steve@$host.zerrtified.local:/var/lib/kubelet/kubelet.crt
     
   scp $host.key \
-    steve@$host:/var/lib/kubelet/kubelet.key
+    steve@$host.zerrtified.local:/var/lib/kubelet/kubelet.key
 done
 ```
 
