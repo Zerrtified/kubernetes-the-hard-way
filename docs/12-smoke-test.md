@@ -173,7 +173,7 @@ NODE_PORT=$(kubectl get svc nginx \
 Make an HTTP request using the IP address and the `nginx` node port:
 
 ```bash
-curl -I http://node0:${NODE_PORT}
+curl -I http://kube-node0:${NODE_PORT}
 ```
 
 ```text

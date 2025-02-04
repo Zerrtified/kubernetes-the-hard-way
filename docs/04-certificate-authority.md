@@ -42,7 +42,7 @@ Generate the certificates and private keys:
 
 ```bash
 certs=(
-  "admin" "node0" "node1"
+  "admin" "kube-node0" "kube-node1"
   "kube-proxy" "kube-scheduler"
   "kube-controller-manager"
   "kube-api-server"
@@ -77,10 +77,10 @@ ls -1 *.crt *.key *.csr
 
 In this section you will copy the various certificates to every machine at a path where each Kubernetes component will search for its certificate pair. In a real-world environment these certificates should be treated like a set of sensitive secrets as they are used as credentials by the Kubernetes components to authenticate to each other.
 
-Copy the appropriate certificates and private keys to the `node0` and `node1` machines:
+Copy the appropriate certificates and private keys to the `kube-node0` and `kube-node1` machines:
 
 ```bash
-for host in node0 node1; do
+for host in kube-node0 kube-node1; do
   ssh steve@$host.zerrtified.local mkdir /var/lib/kubelet/
   
   scp ca.crt steve@$host.zerrtified.local:/var/lib/kubelet/

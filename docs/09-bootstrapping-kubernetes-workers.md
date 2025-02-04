@@ -7,7 +7,7 @@ In this lab you will bootstrap two Kubernetes worker nodes. The following compon
 Copy Kubernetes binaries and systemd unit files to each worker instance:
 
 ```bash
-for host in node0 node1; do
+for host in kube-node0 kube-node1; do
   SUBNET=$(grep $host machines.txt | cut -d " " -f 4)
   sed "s|SUBNET|$SUBNET|g" \
     configs/10-bridge.conf > 10-bridge.conf 
@@ -21,7 +21,7 @@ done
 ```
 
 ```bash
-for host in node0 node1; do
+for host in kube-node0 kube-node1; do
   scp \
     downloads/runc.arm64 \
     downloads/crictl-v1.31.1-linux-arm64.tar.gz \
@@ -41,10 +41,10 @@ for host in node0 node1; do
 done
 ```
 
-The commands in this lab must be run on each worker instance: `node0`, `node1`. Login to the worker instance using the `ssh` command. Example:
+The commands in this lab must be run on each worker instance: `kube-node0`, `kube-node1`. Login to the worker instance using the `ssh` command. Example:
 
 ```bash
-ssh steve@node0
+ssh steve@kube-node0
 ```
 
 ## Provisioning a Kubernetes Worker Node
@@ -169,8 +169,8 @@ ssh steve@server \
 
 ```
 NAME     STATUS   ROLES    AGE    VERSION
-node0   Ready    <none>   1m     v1.31.2
-node1   Ready    <none>   10s    v1.31.2
+kube-node0   Ready    <none>   1m     v1.31.2
+kube-node1   Ready    <none>   10s    v1.31.2
 ```
 
 Next: [Configuring kubectl for Remote Access](10-configuring-kubectl.md)
