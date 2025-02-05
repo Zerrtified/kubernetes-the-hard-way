@@ -162,7 +162,7 @@ The compute instances created in this tutorial will not have permission to compl
 List the registered Kubernetes nodes:
 
 ```bash
-ssh steve@server \
+ssh steve@kube-server01 \
   "kubectl get nodes \
   --kubeconfig admin.kubeconfig"
 ```

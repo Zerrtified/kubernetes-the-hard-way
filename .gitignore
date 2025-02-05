@@ -54,3 +54,4 @@ service-account-csr.json
 *.key
 *.srl
 downloads/
+*.kubeconfig

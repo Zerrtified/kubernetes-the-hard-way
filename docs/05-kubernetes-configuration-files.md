@@ -204,7 +204,7 @@ Copy the `kube-controller-manager` and `kube-scheduler` kubeconfig files to the 
 scp admin.kubeconfig \
   kube-controller-manager.kubeconfig \
   kube-scheduler.kubeconfig \
-  steve@server:~/
+  steve@kube-server01:~/
 ```
 
 Next: [Generating the Data Encryption Config and Key](06-data-encryption-keys.md)

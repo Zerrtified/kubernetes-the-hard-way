@@ -23,7 +23,7 @@ Print the internal IP address and Pod CIDR range for each worker instance:
 ```
 
 ```bash
-ssh steve@server <<EOF
+ssh steve@kube-server01 <<EOF
   ip route add ${NODE_0_SUBNET} via ${NODE_0_IP}
   ip route add ${NODE_1_SUBNET} via ${NODE_1_IP}
 EOF
@@ -44,7 +44,7 @@ EOF
 ## Verification 
 
 ```bash
-ssh steve@server ip route
+ssh steve@kube-server01 ip route
 ```
 
 ```text

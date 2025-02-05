@@ -17,13 +17,13 @@ scp \
   units/kube-scheduler.service \
   configs/kube-scheduler.yaml \
   configs/kube-apiserver-to-kubelet.yaml \
-  steve@server:~/
+  steve@kube-server01:~/
 ```
 
 The commands in this lab must be run on the controller instance: `server`. Login to the controller instance using the `ssh` command. Example:
 
 ```bash
-ssh steve@server
+ssh steve@kube-server01
 ```
 
 ## Provision the Kubernetes Control Plane
@@ -143,7 +143,7 @@ In this section you will configure RBAC permissions to allow the Kubernetes API 
 The commands in this section will affect the entire cluster and only need to be run on the controller node.
 
 ```bash
-ssh steve@server
+ssh steve@kube-server01
 ```
 
 Create the `system:kube-apiserver-to-kubelet` [ClusterRole](https://kubernetes.io/docs/admin/authorization/rbac/#role-and-clusterrole) with permissions to access the Kubelet API and perform most common tasks associated with managing pods:
